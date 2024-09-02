@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
-import IconButton from "@mui/material/IconButton";
 import { useSelector } from "react-redux";
 
 function Header() {
@@ -71,18 +70,16 @@ function Header() {
       </div>
       {isOpen && (
         <div className="md:hidden mt-2">
-          <a href="#" className="block text-white py-2 px-4 hover:bg-blue-500">
-            Home
-          </a>
-          <a href="#" className="block text-white py-2 px-4 hover:bg-blue-500">
-            About
-          </a>
-          <a href="#" className="block text-white py-2 px-4 hover:bg-blue-500">
-            Services
-          </a>
-          <a href="#" className="block text-white py-2 px-4 hover:bg-blue-500">
-            Contact
-          </a>
+          {constantRoute.map((item) => (
+            <Link
+              className="block text-white py-2 px-4 hover:bg-blue-500"
+              key={item.id}
+              to={item.route}
+              onClick={toggleMenu}
+            >
+              {item.name}
+            </Link>
+          ))}
         </div>
       )}
     </nav>

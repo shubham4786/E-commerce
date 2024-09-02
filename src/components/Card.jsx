@@ -1,11 +1,13 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, removeFromCart } from "../features/productsSlice";
+import {
+  addToCart,
+  decrementQuantity,
+  incrementQuantity,
+} from "../features/productsSlice";
+import { Link } from "react-router-dom";
 
 function Card({ product }) {
   const cart = useSelector((state) => state.products.cart);
-
-  console.log(cart);
 
   const dispatch = useDispatch();
 
@@ -13,8 +15,12 @@ function Card({ product }) {
     dispatch(addToCart(product));
   };
 
-  const handleRemoveFromCart = (id) => {
-    dispatch(removeFromCart(id));
+  const handleIncrementQuantity = (id) => {
+    dispatch(incrementQuantity(id));
+  };
+
+  const handleDecrementQuantity = (id) => {
+    dispatch(decrementQuantity(id));
   };
 
   const getQuantity = (productId) => {
@@ -26,25 +32,27 @@ function Card({ product }) {
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 hover:p-4">
-      <img
-        src={`products/${product.imgName}-1-product.webp`}
-        alt={product.title}
-        className="h-56 w-full rounded-md  "
-      />
-      <h3 className="text-xl font-semibold text-center text-gray-800 mb-1">
-        {product.title}
-      </h3>
+      <Link to={`/product/${product.id}`}>
+        <img
+          src={`/products/${product.imgName}-1-product.webp`}
+          alt={product.title}
+          className="h-56 w-full rounded-md  "
+        />
+        <h3 className="text-xl font-semibold text-center text-gray-800 mb-1">
+          {product.title}
+        </h3>
+      </Link>
 
       <div className="text-gray-700 font-semibold  pl-2">
-        MRP: {Math.round(product.price * 83)}
+        MRP: ₹ {Math.round(product.price * 83)}
       </div>
       {cart.some((item) => item.id === product.id) ? (
         <div className=" flex justify-around">
           <button
-            className="mt-2 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
-            onClick={() => handleRemoveFromCart(product.id)}
+            className="mt-2 font-bold text-2xl bg-blue-600 text-white pb-1 px-8 rounded-lg hover:bg-blue-700"
+            onClick={() => handleDecrementQuantity(product.id)}
           >
-            Remove
+            -
           </button>
           <input
             type="text"
@@ -53,10 +61,10 @@ function Card({ product }) {
             readOnly
           />
           <button
-            className="mt-2 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
-            onClick={handleAddToCart}
+            className="mt-2 font-bold text-2xl bg-blue-600 text-white pb-1 px-8 rounded-lg hover:bg-blue-700"
+            onClick={() => handleIncrementQuantity(product.id)}
           >
-            Add
+            +
           </button>
         </div>
       ) : (

@@ -12,12 +12,16 @@ import {
 } from "react-router-dom";
 import Cart from "./components/Cart.jsx";
 import Products from "./components/Products.jsx";
+import ProductView from "./components/ProductView.jsx";
+import Checkout from "./components/Checkout.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route path="" element={<Products />} />
       <Route path="cart" element={<Cart />} />
+      <Route path="product/:id" element={<ProductView />} />
+      <Route path="checkout" element={<Checkout />} />
     </Route>
   )
 );

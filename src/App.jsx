@@ -5,7 +5,6 @@ import Footer from "./components/Footer";
 import { Outlet } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { fetchData } from "./features/productsSlice";
-import Checkout from "./components/Checkout";
 
 function App() {
   const dispatch = useDispatch();
@@ -19,7 +18,6 @@ function App() {
       <Header />
       <Outlet />
       {/* <Footer /> */}
-      {/* <Checkout /> */}
     </>
   );
 }

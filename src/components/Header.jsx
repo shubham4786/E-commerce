@@ -1,17 +1,23 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../features/authSlice";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const cart = useSelector((state) => state.products.cart);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
 
   const constantRoute = [
     {
@@ -23,9 +29,12 @@ function Header() {
     {
       id: 2,
       name: (
-        <StyledBadge badgeContent={cart.length} color="secondary">
-          <ShoppingCartIcon />
-        </StyledBadge>
+        <>
+          <StyledBadge badgeContent={cart.length} color="secondary">
+            <ShoppingCartIcon />
+          </StyledBadge>
+          <span className="pl-1">Cart</span>
+        </>
       ),
       route: "/cart",
     },
@@ -34,17 +43,36 @@ function Header() {
   return (
     <nav className="bg-blue-600 p-4 fixed w-full ">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="text-white text-2xl font-bold">ShopFlex</div>
+        <Link className="text-white text-2xl font-bold" to={"/"}>
+          ShopFlex
+        </Link>
         <div className="hidden md:flex space-x-6">
           {constantRoute.map((item) => (
             <Link
-              className="text-white hover:text-gray-300"
+              className="text-white hover:text-gray-300 text-xl "
               key={item.id}
               to={item.route}
             >
               {item.name}
             </Link>
           ))}
+          {user ? (
+            <span
+              className="text-white hover:text-gray-300 text-xl cursor-pointer"
+              onClick={() => dispatch(logout())}
+            >
+              Logout
+            </span>
+          ) : (
+            <span
+              className="text-white hover:text-gray-300 text-xl cursor-pointer"
+              onClick={() =>
+                navigate("/login", { state: { from: location.pathname } })
+              }
+            >
+              Login
+            </span>
+          )}
         </div>
         <div className="md:hidden">
           <button
@@ -80,6 +108,27 @@ function Header() {
               {item.name}
             </Link>
           ))}
+          {user ? (
+            <span
+              className="block text-white py-2 px-4 hover:bg-blue-500"
+              onClick={() => {
+                dispatch(logout());
+                toggleMenu();
+              }}
+            >
+              Logout
+            </span>
+          ) : (
+            <span
+              className="block text-white py-2 px-4 hover:bg-blue-500"
+              onClick={() => {
+                navigate("/login", { state: { from: location.pathname } });
+                toggleMenu();
+              }}
+            >
+              Login
+            </span>
+          )}
         </div>
       )}
     </nav>

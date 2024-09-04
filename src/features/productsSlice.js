@@ -46,18 +46,6 @@ export const productsSlice = createSlice({
       }
     },
 
-    // removeFromCart: (state, action) => {
-    //   const itemId = action.payload;
-    //   const existingItem = state.cart.find(
-    //     (cartItem) => cartItem.id === itemId
-    //   );
-    //   if (existingItem && existingItem.quantity > 1) {
-    //     existingItem.quantity -= 1;
-    //   } else {
-    //     state.cart = state.cart.filter((item) => item.id !== itemId);
-    //   }
-    // },
-
     incrementQuantity: (state, action) => {
       const itemId = action.payload;
       const item = state.cart.find((cartItem) => cartItem.id === itemId);

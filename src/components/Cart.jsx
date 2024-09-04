@@ -51,11 +51,11 @@ const Cart = () => {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-4 gap-6 ">
+            <div className="grid grid-cols-4  ">
               {cart.map((item) => (
                 <div
                   key={item.id}
-                  className="col-span-5 sm:col-span-4 grid grid-cols-3 items-center border-b pb-4 mb-4"
+                  className="col-span-5 sm:col-span-4 grid grid-cols-3 items-center border-b py-3 px-4 hover:bg-gray-50"
                 >
                   <div className="col-span-2 flex ">
                     <Link to={`/product/${item.id}`}>
@@ -110,11 +110,11 @@ const Cart = () => {
               <p className="text-2xl font-bold">
                 Total Amount: ₹ {totalAmount}
               </p>
-              <Link to="/checkout">
-                <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-4 rounded">
-                  Proceed to Checkout
-                </button>
-              </Link>
+              {/* <Link to="/checkout"> */}
+              <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-4 rounded">
+                Proceed to Checkout
+              </button>
+              {/* </Link> */}
             </div>
           </>
         )}

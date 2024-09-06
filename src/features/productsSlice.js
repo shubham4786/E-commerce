@@ -6,6 +6,14 @@ export const fetchData = createAsyncThunk("product/fetchProduct", async () => {
   return response.data;
 });
 
+export const placeOrder = createAsyncThunk(
+  "order/placeOrder",
+  async (order) => {
+    const response = await axios.post("http://localhost:3000/orders", order);
+    return response.data;
+  }
+);
+
 const initialState = {
   products: [],
   status: "idle",
@@ -13,6 +21,7 @@ const initialState = {
   filteredItems: [],
   selectedSizes: [],
   cart: [],
+  order: null,
 };
 
 export const productsSlice = createSlice({
@@ -85,6 +94,19 @@ export const productsSlice = createSlice({
         state.filteredItems = action.payload;
       })
       .addCase(fetchData.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+
+      .addCase(placeOrder.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(placeOrder.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.order = action.payload;
+        state.cart = [];
+      })
+      .addCase(placeOrder.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });

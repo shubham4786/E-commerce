@@ -110,11 +110,11 @@ const Cart = () => {
               <p className="text-2xl font-bold">
                 Total Amount: ₹ {totalAmount}
               </p>
-              {/* <Link to="/checkout"> */}
-              <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-4 rounded">
-                Proceed to Checkout
-              </button>
-              {/* </Link> */}
+              <Link to="/checkout">
+                <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-4 rounded">
+                  Proceed to Checkout
+                </button>
+              </Link>
             </div>
           </>
         )}

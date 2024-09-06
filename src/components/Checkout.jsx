@@ -1,14 +1,25 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { placeOrder } from "../features/productsSlice";
 
 const Checkout = () => {
   const cart = useSelector((state) => state.products.cart);
+  const user = useSelector((state) => state.auth.user);
   const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [email, setEmail] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [error, setError] = useState("");
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login", { state: { from: location.pathname } });
+    }
+  }, [user, navigate, location.pathname]);
 
   const totalAmount = cart.reduce(
     (total, item) => total + Math.round(item.price * 83) * item.quantity,
@@ -16,9 +27,29 @@ const Checkout = () => {
   );
 
   const handlePlaceOrder = () => {
-    // Simulate placing an order
-    alert("Order placed successfully!");
+    if (!name || !street || !city || !postalCode) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+
+    const orderId = Math.floor(Math.random() * 1000000);
+    const orderDetails = {
+      id: orderId,
+      name,
+      address: { street, city, postalCode },
+      email: user.email,
+      totalAmount,
+      items: cart.map((item) => ({
+        id: item.id,
+        title: item.title,
+        price: Math.round(item.price * 83),
+        quantity: item.quantity,
+      })),
+    };
+
+    dispatch(placeOrder(orderDetails));
     navigate("/");
+    alert(`Order Id- ${orderId} placed successfully!`);
   };
 
   return (
@@ -29,6 +60,7 @@ const Checkout = () => {
         <div>
           <h2 className="text-2xl font-semibold mb-4">Shipping Information</h2>
           <form>
+            {error && <p className="text-red-500 font-bold mb-4">{error}</p>}
             <div className="mb-4">
               <label
                 className="block text-gray-700 font-bold mb-2"
@@ -41,52 +73,68 @@ const Checkout = () => {
                 type="text"
                 className="w-full p-3 border rounded"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  setError("");
+                  setName(e.target.value);
+                }}
+                required
               />
             </div>
             <div className="mb-4">
               <label
                 className="block text-gray-700 font-bold mb-2"
-                htmlFor="address"
+                htmlFor="street"
               >
-                Address
+                Street
               </label>
               <input
-                id="address"
+                id="street"
                 type="text"
                 className="w-full p-3 border rounded"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
+                value={street}
+                onChange={(e) => {
+                  setStreet(e.target.value);
+                  setError("");
+                }}
+                required
               />
             </div>
             <div className="mb-4">
               <label
                 className="block text-gray-700 font-bold mb-2"
-                htmlFor="email"
+                htmlFor="city"
               >
-                Email
+                City
               </label>
               <input
-                id="email"
-                type="email"
-                className="w-full p-3 border rounded"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 font-bold mb-2"
-                htmlFor="cardNumber"
-              >
-                Credit Card Number
-              </label>
-              <input
-                id="cardNumber"
+                id="city"
                 type="text"
                 className="w-full p-3 border rounded"
-                value={cardNumber}
-                onChange={(e) => setCardNumber(e.target.value)}
+                value={city}
+                onChange={(e) => {
+                  setCity(e.target.value);
+                  setError("");
+                }}
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 font-bold mb-2"
+                htmlFor="postalCode"
+              >
+                Postal Code
+              </label>
+              <input
+                id="postalCode"
+                type="text"
+                className="w-full p-3 border rounded"
+                value={postalCode}
+                onChange={(e) => {
+                  setPostalCode(e.target.value);
+                  setError("");
+                }}
+                required
               />
             </div>
           </form>
@@ -112,13 +160,13 @@ const Checkout = () => {
                   </div>
                 </div>
                 <p className="text-lg font-bold">
-                  ₹{Math.round(item.price * 83) * item.quantity}
+                  ₹ {Math.round(item.price * 83) * item.quantity}
                 </p>
               </div>
             ))}
             <div className="flex justify-between items-center border-t pt-4 mt-4">
               <h3 className="text-xl font-bold">Total Amount:</h3>
-              <p className="text-2xl font-extrabold">₹{totalAmount}</p>
+              <p className="text-2xl font-extrabold">₹ {totalAmount}</p>
             </div>
           </div>
 

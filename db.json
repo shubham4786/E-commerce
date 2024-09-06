@@ -5,12 +5,46 @@
       "name": "Abc",
       "email": "abc@gmail.com",
       "password": "123456"
+    }
+  ],
+  "orders": [
+    {
+      "id": 667841,
+      "name": "Abc",
+      "address": {
+        "street": "Reddy Godown",
+        "city": "Gadchiroli",
+        "postalCode": "442605"
+      },
+      "email": "abc@gmail.com",
+      "totalAmount": 2150,
+      "items": [
+        {
+          "id": "4",
+          "title": "Skater Black Sweatshirt",
+          "price": 2150,
+          "quantity": 1
+        }
+      ]
     },
     {
-      "id": "27f6",
-      "name": "shubham",
-      "email": "shubham@gmail.com",
-      "password": "123456"
+      "id": 675497,
+      "name": "Abc",
+      "address": {
+        "street": "sd",
+        "city": "Gadchiroli",
+        "postalCode": "442605"
+      },
+      "email": "abc@gmail.com",
+      "totalAmount": 2150,
+      "items": [
+        {
+          "id": "4",
+          "title": "Skater Black Sweatshirt",
+          "price": 2150,
+          "quantity": 1
+        }
+      ]
     }
   ],
   "products": [

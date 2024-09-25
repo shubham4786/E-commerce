@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { toggleSizeFilter } from "../features/productsSlice";
+import { toggleSizeFilter } from "../redux/products/productsActions";
 
 const Sizes = () => {
   const dispatch = useDispatch();

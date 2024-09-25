@@ -3,7 +3,7 @@ import {
   addToCart,
   decrementQuantity,
   incrementQuantity,
-} from "../features/productsSlice";
+} from "../redux/products/productsActions";
 import { Link } from "react-router-dom";
 
 function Card({ product }) {

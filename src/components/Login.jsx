@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../features/authSlice";
+import { loginUser } from "../redux/auth/authActions";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -14,12 +14,14 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginUser({ email, password })).then((action) => {
-      if (loginUser.fulfilled.match(action)) {
-        navigate(from);
-      }
-    });
+    dispatch(loginUser({ email, password }));
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate(from);
+    }
+  }, [user]);
 
   return (
     <div className="container mx-auto p-8 pt-20">

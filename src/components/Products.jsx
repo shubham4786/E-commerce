@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchData } from "../redux/products/productsActions";
 
 function Products() {
+  const dispatch = useDispatch();
+
   const { filteredItems, status, error } = useSelector(
     (state) => state.products
   );
+
+  useEffect(() => {
+    dispatch(fetchData());
+  }, [dispatch]);
 
   return (
     <div className="bg-gray-100 pt-4">

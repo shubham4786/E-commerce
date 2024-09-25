@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { checkUserExists, signupUser } from "../features/authSlice";
+import { checkUserExists, signupUser } from "../redux/auth/authActions";
 
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const { loading, error, userExists } = useSelector((state) => state.auth);
+  const { loading, error, userExists, user } = useSelector(
+    (state) => state.auth
+  );
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from || "/";
@@ -22,13 +24,15 @@ const Signup = () => {
     if (userExists) {
       alert("Username already exists, Please login");
     } else {
-      dispatch(signupUser({ name, email, password })).then((action) => {
-        if (signupUser.fulfilled.match(action)) {
-          navigate(from);
-        }
-      });
+      dispatch(signupUser({ name, email, password }));
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate(from);
+    }
+  }, [user]);
 
   return (
     <div className="container mx-auto p-8 pt-20">

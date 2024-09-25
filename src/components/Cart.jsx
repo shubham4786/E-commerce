@@ -5,7 +5,7 @@ import {
   removeFromCart,
   incrementQuantity,
   decrementQuantity,
-} from "../features/productsSlice";
+} from "../redux/products/productsActions";
 import { Link } from "react-router-dom";
 
 const Cart = () => {

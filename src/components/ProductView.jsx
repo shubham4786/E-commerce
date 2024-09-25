@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, removeFromCart } from "../features/productsSlice";
 import { useParams } from "react-router-dom";
+import { addToCart, removeFromCart } from "../redux/products/productsActions";
 
 const ProductView = () => {
   const dispatch = useDispatch();
@@ -11,8 +11,6 @@ const ProductView = () => {
   const product = useSelector((state) =>
     state.products.products.find((item) => item.id === id)
   );
-
-  console.log(product);
 
   if (!product) {
     return <div>Product not found</div>;

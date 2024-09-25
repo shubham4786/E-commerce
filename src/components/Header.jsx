@@ -4,7 +4,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../features/authSlice";
+import { logout } from "../redux/auth/authActions";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);

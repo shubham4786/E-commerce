@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"vite\" \"json-server --watch db.json\"",
-    "build": "concurrently \"vite build\"",
-    "build:json-server": "wait-on http://localhost:3000/ && vite build",
+    "build": "vite build",
+    "build:wait-and-build": "wait-on http://localhost:3000/ && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "start:json-server": "json-server --watch db.json"

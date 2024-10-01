@@ -33,6 +33,12 @@
       "name": "Ranjan",
       "email": "ranjan@gmail.com",
       "password": "123456"
+    },
+    {
+      "id": "b8b7",
+      "name": "asd",
+      "email": "asd@gmail.com",
+      "password": "123456"
     }
   ],
   "orders": [

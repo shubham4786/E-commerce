@@ -69,7 +69,9 @@ export const clearCart = () => ({ type: CLEAR_CART });
 export const fetchData = () => async (dispatch) => {
   dispatch(fetchProductsRequest());
   try {
-    const response = await axios.get("http://localhost:3000/products");
+    const response = await axios.get(
+      "https://e-commerce-data-8zft.onrender.com/products"
+    );
     dispatch(fetchProductsSuccess(response.data));
   } catch (error) {
     dispatch(fetchProductsFailure(error.message));
@@ -79,7 +81,10 @@ export const fetchData = () => async (dispatch) => {
 export const placeOrder = (order) => async (dispatch) => {
   dispatch(placeOrderRequest());
   try {
-    const response = await axios.post("http://localhost:3000/orders", order);
+    const response = await axios.post(
+      "https://e-commerce-data-8zft.onrender.com/orders",
+      order
+    );
     dispatch(placeOrderSuccess(response.data));
   } catch (error) {
     dispatch(placeOrderFailure(error.message));

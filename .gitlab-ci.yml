@@ -6,11 +6,10 @@ cache:
 
 before_script:
   - npm install
-  - npm install -g json-server concurrently
 
 pages:
   script:
-    - concurrently "json-server --watch db.json" "npm run build:wait-and-build"
+    - npm run build
     - mkdir -p public
     - cp -r dist/* public/
 

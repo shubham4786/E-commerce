@@ -86,7 +86,7 @@ export const editProfileFailure = (error) => ({
 
 export const logout = () => ({ type: LOGOUT });
 
-const API_URL = "http://localhost:3000/users";
+const API_URL = "https://e-commerce-data-8zft.onrender.com/users";
 
 export const editProfile = (userId, profileData) => async (dispatch) => {
   dispatch(editProfileRequest());

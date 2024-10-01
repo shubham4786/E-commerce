@@ -9,6 +9,10 @@ before_script:
 
 pages:
   script:
+    - nohup json-server --watch db.json &
+    - sleep 5
+    - echo "Contents of public directory:"
+    - ls public
     - npm run build
     - mkdir -p public
     - cp -r dist/* public/

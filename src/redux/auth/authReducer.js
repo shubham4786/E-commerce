@@ -9,6 +9,12 @@ import {
   SIGNUP_USER_FAILURE,
   SIGNUP_USER_REQUEST,
   SIGNUP_USER_SUCCESS,
+  UPDATE_ADDRESS_SUCCESS,
+  UPDATE_ADDRESS_REQUEST,
+  UPDATE_ADDRESS_FAILURE,
+  EDIT_PROFILE_REQUEST,
+  EDIT_PROFILE_SUCCESS,
+  EDIT_PROFILE_FAILURE,
 } from "./authActions";
 
 const initialState = {
@@ -50,6 +56,28 @@ const authReducer = (state = initialState, action) => {
 
     case LOGOUT:
       return { ...state, user: null };
+
+    case UPDATE_ADDRESS_REQUEST:
+      return { ...state, loading: true, error: null };
+
+    case UPDATE_ADDRESS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        user: { ...state.user, address: payload },
+      };
+
+    case UPDATE_ADDRESS_FAILURE:
+      return { ...state, loading: false, error: payload };
+
+    case EDIT_PROFILE_REQUEST:
+      return { ...state, loading: true, error: null };
+
+    case EDIT_PROFILE_SUCCESS:
+      return { ...state, loading: false, user: payload };
+
+    case EDIT_PROFILE_FAILURE:
+      return { ...state, loading: false, error: payload };
 
     default:
       return state;

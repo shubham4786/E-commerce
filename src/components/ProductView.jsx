@@ -24,7 +24,7 @@ const ProductView = () => {
   };
 
   return (
-    <div className="container mx-auto p-8 pt-20">
+    <div className="container mx-auto p-8 pt-16">
       <div className="bg-white shadow-lg rounded-lg p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="flex justify-center gap-2">
           <img

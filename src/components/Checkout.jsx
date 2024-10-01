@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { placeOrder } from "../redux/products/productsActions";
+import { updateAddress } from "../redux/auth/authActions";
 
 const Checkout = () => {
   const cart = useSelector((state) => state.products.cart);
   const user = useSelector((state) => state.auth.user);
-  const [name, setName] = useState("");
-  const [street, setStreet] = useState("");
-  const [city, setCity] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [name, setName] = useState(user?.name || "");
+  const [street, setStreet] = useState(user?.address?.street || "");
+  const [city, setCity] = useState(user?.address?.city || "");
+  const [postalCode, setPostalCode] = useState(user?.address?.postalCode || "");
+  const [editMode, setEditMode] = useState(!user?.address);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!user) {
@@ -52,6 +55,17 @@ const Checkout = () => {
     alert(`Order Id- ${orderId} placed successfully!`);
   };
 
+  const handleSaveAddress = () => {
+    if (!street || !city || !postalCode) {
+      setError("Please fill in all address fields.");
+      return;
+    }
+
+    const newAddress = { street, city, postalCode };
+    dispatch(updateAddress(user, newAddress));
+    setEditMode(false);
+  };
+
   return (
     <div className="container mx-auto p-8 pt-20">
       <h1 className="text-4xl font-extrabold mb-8">Checkout</h1>
@@ -59,85 +73,106 @@ const Checkout = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <h2 className="text-2xl font-semibold mb-4">Shipping Information</h2>
-          <form>
-            {error && <p className="text-red-500 font-bold mb-4">{error}</p>}
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 font-bold mb-2"
-                htmlFor="name"
+
+          {editMode ? (
+            <form>
+              {error && <p className="text-red-500 font-bold mb-4">{error}</p>}
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 font-bold mb-2"
+                  htmlFor="name"
+                >
+                  Full Name
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  className="w-full p-3 border rounded"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 font-bold mb-2"
+                  htmlFor="street"
+                >
+                  Street
+                </label>
+                <input
+                  id="street"
+                  type="text"
+                  className="w-full p-3 border rounded"
+                  value={street}
+                  onChange={(e) => setStreet(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 font-bold mb-2"
+                  htmlFor="city"
+                >
+                  City
+                </label>
+                <input
+                  id="city"
+                  type="text"
+                  className="w-full p-3 border rounded"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 font-bold mb-2"
+                  htmlFor="postalCode"
+                >
+                  Postal Code
+                </label>
+                <input
+                  id="postalCode"
+                  type="text"
+                  className="w-full p-3 border rounded"
+                  value={postalCode}
+                  onChange={(e) => setPostalCode(e.target.value)}
+                  required
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={handleSaveAddress}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
-                Full Name
-              </label>
-              <input
-                id="name"
-                type="text"
-                className="w-full p-3 border rounded"
-                value={name}
-                onChange={(e) => {
-                  setError("");
-                  setName(e.target.value);
-                }}
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 font-bold mb-2"
-                htmlFor="street"
+                Save Address
+              </button>
+            </form>
+          ) : (
+            <div>
+              <p className="text-lg mb-4">
+                <strong>Full Name:</strong> {name}
+              </p>
+              <p className="text-lg mb-4">
+                <strong>Street:</strong> {user?.address?.street}
+              </p>
+              <p className="text-lg mb-4">
+                <strong>City:</strong> {user?.address?.city}
+              </p>
+              <p className="text-lg mb-4">
+                <strong>Postal Code:</strong> {user?.address?.postalCode}
+              </p>
+
+              <button
+                onClick={() => setEditMode(true)}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
-                Street
-              </label>
-              <input
-                id="street"
-                type="text"
-                className="w-full p-3 border rounded"
-                value={street}
-                onChange={(e) => {
-                  setStreet(e.target.value);
-                  setError("");
-                }}
-                required
-              />
+                Update Address
+              </button>
             </div>
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 font-bold mb-2"
-                htmlFor="city"
-              >
-                City
-              </label>
-              <input
-                id="city"
-                type="text"
-                className="w-full p-3 border rounded"
-                value={city}
-                onChange={(e) => {
-                  setCity(e.target.value);
-                  setError("");
-                }}
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-gray-700 font-bold mb-2"
-                htmlFor="postalCode"
-              >
-                Postal Code
-              </label>
-              <input
-                id="postalCode"
-                type="text"
-                className="w-full p-3 border rounded"
-                value={postalCode}
-                onChange={(e) => {
-                  setPostalCode(e.target.value);
-                  setError("");
-                }}
-                required
-              />
-            </div>
-          </form>
+          )}
         </div>
 
         <div>

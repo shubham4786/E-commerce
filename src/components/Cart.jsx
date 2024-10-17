@@ -6,11 +6,13 @@ import {
   incrementQuantity,
   decrementQuantity,
 } from "../redux/products/productsActions";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 
 const Cart = () => {
   const cart = useSelector((state) => state.products.cart);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleRemoveFromCart = (id) => {
     dispatch(removeFromCart(id));
@@ -35,7 +37,14 @@ const Cart = () => {
 
   return (
     <div className="container mx-auto p-8 pt-20">
-      <h1 className="text-4xl font-extrabold mb-8">Shopping Cart</h1>
+      <div className="flex">
+        <ArrowCircleLeftOutlinedIcon
+          sx={{ fontSize: 50 }}
+          className=" text-cyan-700 hover:text-cyan-900 cursor-pointer"
+          onClick={() => navigate(-1)}
+        />
+        <h1 className="text-4xl font-extrabold mb-8 ml-3">Shopping Cart</h1>
+      </div>
       <div className="bg-white shadow-lg rounded-lg p-6 ">
         {cart.length === 0 ? (
           <div className=" text-center ">

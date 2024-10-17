@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { placeOrder } from "../redux/products/productsActions";
 import { updateAddress } from "../redux/auth/authActions";
+import { toast, ToastContainer } from "react-toastify";
+import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 
 const Checkout = () => {
   const cart = useSelector((state) => state.products.cart);
@@ -31,7 +33,32 @@ const Checkout = () => {
 
   const handlePlaceOrder = () => {
     if (!name || !street || !city || !postalCode) {
+      toast.error("Please fill in all required fields.", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
       setError("Please fill in all required fields.");
+      return;
+    }
+
+    if (!cart.length > 0) {
+      toast.error("Please add product to cart", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+
       return;
     }
 
@@ -47,16 +74,27 @@ const Checkout = () => {
         title: item.title,
         price: Math.round(item.price * 83),
         quantity: item.quantity,
+        imgName: item.imgName,
       })),
     };
 
     dispatch(placeOrder(orderDetails));
-    navigate("/");
-    alert(`Order Id- ${orderId} placed successfully!`);
+
+    navigate("/order-confirmation", { state: { orderDetails } });
   };
 
   const handleSaveAddress = () => {
     if (!street || !city || !postalCode) {
+      toast.error("Please fill in all required fields.", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
       setError("Please fill in all address fields.");
       return;
     }
@@ -68,7 +106,16 @@ const Checkout = () => {
 
   return (
     <div className="container mx-auto p-8 pt-20">
-      <h1 className="text-4xl font-extrabold mb-8">Checkout</h1>
+      <ToastContainer />
+      <div className="flex">
+        <ArrowCircleLeftOutlinedIcon
+          sx={{ fontSize: 50 }}
+          className=" text-cyan-700 hover:text-cyan-900 cursor-pointer"
+          onClick={() => navigate(-1)}
+        />
+
+        <h1 className="text-4xl font-extrabold mb-8 ml-3">Checkout</h1>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>

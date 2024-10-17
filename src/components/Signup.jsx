@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { checkUserExists, signupUser } from "../redux/auth/authActions";
+import {
+  checkUserExists,
+  signupUser,
+  changeLocation,
+} from "../redux/auth/authActions";
+import { toast, ToastContainer } from "react-toastify";
+import swal from "sweetalert";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -22,7 +28,8 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (userExists) {
-      alert("Username already exists, Please login");
+      swal({ icon: "warning", title: "Username already exists, Please login" });
+      navigate("/login");
     } else {
       dispatch(signupUser({ name, email, password }));
     }
@@ -34,8 +41,37 @@ const Signup = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    console.log(error);
+    if (error)
+      toast.error(error, {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    dispatch(changeLocation());
+  }, [error]);
+
   return (
     <div className="container mx-auto p-8 pt-20">
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition:Flip
+      />
       <h1 className="text-4xl font-bold mb-8">Sign Up</h1>
       <form
         onSubmit={handleSubmit}

@@ -84,6 +84,8 @@ export const editProfileFailure = (error) => ({
   payload: error,
 });
 
+export const changeLocation = () => ({ type: "CHANGE_LOCATION" });
+
 export const logout = () => ({ type: LOGOUT });
 
 const API_URL = "https://e-commerce-data-8zft.onrender.com/users";
@@ -137,12 +139,14 @@ export const loginUser =
   async (dispatch) => {
     dispatch(loginUserRequest());
     try {
-      const response = await axios.get(
-        `${API_URL}?email=${email}&password=${password}`
-      );
+      // const response = await axios.get(`${API_URL}?email=${email}&password=${password}`);
+
+      const response = await axios.get(`${API_URL}?email=${email}`);
+
+      // console.log(response);
 
       if (!response.data[0]) {
-        throw new Error("User Not Registered");
+        throw new Error("User Not Registered, Please Sign Up");
       } else if (
         response.data[0].email === email &&
         response.data[0].password === password

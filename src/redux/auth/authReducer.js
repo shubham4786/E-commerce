@@ -28,7 +28,7 @@ const authReducer = (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
     case CHECK_USER_EXISTS_REQUEST:
-      return { ...state, loading: true, error: null };
+      return { ...state, error: null };
 
     case SIGNUP_USER_REQUEST:
       return { ...state, loading: true, error: null };
@@ -78,6 +78,9 @@ const authReducer = (state = initialState, action) => {
 
     case EDIT_PROFILE_FAILURE:
       return { ...state, loading: false, error: payload };
+
+    case "CHANGE_LOCATION":
+      return { ...state, error: null };
 
     default:
       return state;

@@ -17,6 +17,10 @@ import Checkout from "./components/Checkout.jsx";
 import Login from "./components/Login.jsx";
 import Signup from "./components/Signup.jsx";
 import Profile from "./components/Profile.jsx";
+import OrderConfirmation from "./components/OrderConfirmation.jsx";
+import OrderHistory from "./components/OrderHistory.jsx";
+import "react-toastify/dist/ReactToastify.css";
+import ViewProduct from "./components/ViewProduct.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +32,8 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/order-confirmation" element={<OrderConfirmation />} />
+      <Route path="/orders" element={<OrderHistory />} />
     </Route>
   )
 );
@@ -35,6 +41,7 @@ const router = createBrowserRouter(
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
+      {/* <ViewProduct /> */}
       <RouterProvider router={router} />
     </Provider>
   </StrictMode>

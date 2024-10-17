@@ -12,29 +12,25 @@ const Sizes = () => {
   };
 
   return (
-    <div className="p-8">
-      <h3 className="text-xl font-semibold mb-4">Sizes</h3>
-      <div className="flex flex-wrap justify-center gap-4">
+    <div className="mb-6">
+      <label className="block mb-2 font-semibold">Sizes</label>
+      <div className="flex flex-wrap justify-center gap-2">
         {sizes.map((size) => (
           <button
             key={size}
             onClick={() => handleButtonClick(size)}
-            className={`w-12 h-12 flex items-center justify-center rounded-full border-2 
+            className={`w-10 h-10 flex items-center justify-center rounded-full border-2 
               ${
                 selectedSizes.includes(size)
                   ? "bg-gray-500 text-gray-800 "
                   : "bg-gray-300 text-gray-600 "
               } 
-               hover:text-white hover:border-gray-500 transition-colors duration-200`}
+               hover:text-slate-800 hover:border-gray-500 hover:font-extrabold transition-colors duration-200 font-medium`}
           >
             {size}
           </button>
         ))}
       </div>
-      {/* <div className="mt-6">
-        <h4 className="text-lg font-semibold">Selected Sizes:</h4>
-        <p>{selectedSizes.length > 0 ? selectedSizes.join(", ") : "None"}</p>
-      </div> */}
     </div>
   );
 };

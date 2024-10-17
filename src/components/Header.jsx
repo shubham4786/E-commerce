@@ -34,6 +34,9 @@ function Header() {
     if (option == "Profile") {
       navigate("/profile");
     }
+    if (option == "Orders") {
+      navigate("/orders");
+    }
     if (option == "Logout") {
       dispatch(logout());
     }

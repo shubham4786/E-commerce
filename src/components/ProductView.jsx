@@ -1,10 +1,14 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { addToCart, removeFromCart } from "../redux/products/productsActions";
+import { toast, ToastContainer } from "react-toastify";
+import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 
 const ProductView = () => {
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
   const cart = useSelector((state) => state.products.cart);
 
   const { id } = useParams();
@@ -17,6 +21,16 @@ const ProductView = () => {
   }
   const handleAddToCart = () => {
     dispatch(addToCart(product));
+    toast.success(`product added to the cart!`, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
   };
 
   const handleRemoveFromCart = (id) => {
@@ -25,8 +39,16 @@ const ProductView = () => {
 
   return (
     <div className="container mx-auto p-8 pt-16">
+      <ToastContainer />
+
+      <ArrowCircleLeftOutlinedIcon
+        sx={{ fontSize: 50 }}
+        className=" text-cyan-700 hover:text-cyan-900 cursor-pointer"
+        onClick={() => navigate(-1)}
+      />
+
       <div className="bg-white shadow-lg rounded-lg p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="flex justify-center gap-2">
+        <div className="flex justify-center gap-2 flex-wrap">
           <img
             src={`/products/${product.imgName}-1-product.webp`}
             alt={product.title}
@@ -61,12 +83,20 @@ const ProductView = () => {
           </div>
 
           {cart.some((item) => item.id === product.id) ? (
-            <button
-              onClick={() => handleRemoveFromCart(product.id)}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-3 px-6 rounded ml-4"
-            >
-              Remove
-            </button>
+            <>
+              <button
+                onClick={() => handleRemoveFromCart(product.id)}
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-3 px-6 rounded ml-4"
+              >
+                Remove
+              </button>
+              <button
+                onClick={() => navigate("/cart")}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded ml-4"
+              >
+                Go to Cart
+              </button>
+            </>
           ) : (
             <button
               onClick={handleAddToCart}

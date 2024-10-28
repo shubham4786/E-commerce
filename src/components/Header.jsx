@@ -64,7 +64,7 @@ function Header() {
   ];
 
   return (
-    <nav className="bg-blue-600  fixed w-full ">
+    <nav className="bg-blue-600  fixed w-full z-10 ">
       <div className="container mx-auto flex justify-between items-center">
         <Link className="text-white text-2xl font-bold p-2" to={"/"}>
           ShopFlex

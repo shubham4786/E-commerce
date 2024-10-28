@@ -33,11 +33,11 @@ const PriceRange = () => {
           onChange={(e) => handlePriceRangeChange([min, e.target.value])}
         />
         <div className="flex justify-between ">
-          <span>₹ {min * 83}</span>
-          <span>₹ {Math.round(max * 83)}</span>
+          <span>${min}</span>
+          <span>${Math.round(max)}</span>
         </div>
       </div>
-      <div className="mb-6">
+      {/* <div className="mb-6">
         <label className="block mb-2 font-semibold">Free Shipping:</label>
         <FormControlLabel
           control={
@@ -48,7 +48,7 @@ const PriceRange = () => {
           }
           label="Free Shipping"
         />
-      </div>
+      </div> */}
     </>
   );
 };

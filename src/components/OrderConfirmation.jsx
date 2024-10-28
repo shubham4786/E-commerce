@@ -45,25 +45,21 @@ const OrderConfirmation = () => {
           <div key={item.id} className="flex justify-between items-center mb-4">
             <div className="flex">
               <img
-                src={`/products/${item.imgName}-1-cart.webp`} // Assuming you have an image naming convention
+                src={item.imgName}
                 alt={item.title}
-                className="h-16 rounded-md"
+                className=" h-16 rounded-md  "
               />
               <div className="pl-4">
                 <h3 className="text-lg font-semibold">{item.title}</h3>
                 <p className="text-gray-600">Quantity: {item.quantity}</p>
               </div>
             </div>
-            <p className="text-lg font-bold">
-              ₹ {Math.round(item.price) * item.quantity}
-            </p>
+            <p className="text-lg font-bold">${item.price * item.quantity}</p>
           </div>
         ))}
         <div className="flex justify-between items-center border-t pt-4 mt-4">
           <h3 className="text-xl font-bold">Total Amount:</h3>
-          <p className="text-2xl font-extrabold">
-            ₹ {orderDetails.totalAmount}
-          </p>
+          <p className="text-2xl font-extrabold">${orderDetails.totalAmount}</p>
         </div>
       </div>
     </div>

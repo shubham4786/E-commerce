@@ -31,7 +31,7 @@ const Cart = () => {
   };
 
   const totalAmount = cart.reduce(
-    (total, item) => total + Math.round(item.price * 83) * item.quantity,
+    (total, item) => total + item.price * item.quantity,
     0
   );
 
@@ -69,9 +69,9 @@ const Cart = () => {
                   <div className="col-span-2 flex ">
                     <Link to={`/product/${item.id}`}>
                       <img
-                        src={`/products/${item.imgName}-1-cart.webp`}
+                        src={item.thumbnail}
                         alt={item.title}
-                        className=" rounded-md  "
+                        className="w-full h-28 rounded-md  "
                       />
                     </Link>
 
@@ -79,9 +79,7 @@ const Cart = () => {
                       <Link to={`/product/${item.id}`}>
                         <h3 className="text-xl font-semibold">{item.title}</h3>
                       </Link>
-                      <p className="text-gray-600">
-                        Price: ₹ {Math.round(item.price * 83)}
-                      </p>
+                      <p className="text-gray-600">Price: ${item.price}</p>
                     </div>
                   </div>
                   <div className="flex items-center col-span-1 justify-self-end">
@@ -116,9 +114,7 @@ const Cart = () => {
                 Clear Cart
               </button>
 
-              <p className="text-2xl font-bold">
-                Total Amount: ₹ {totalAmount}
-              </p>
+              <p className="text-2xl font-bold">Total Amount: ${totalAmount}</p>
               <Link to="/checkout">
                 <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-4 rounded">
                   Proceed to Checkout

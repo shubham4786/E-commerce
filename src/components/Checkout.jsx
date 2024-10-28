@@ -27,7 +27,7 @@ const Checkout = () => {
   }, [user, navigate, location.pathname]);
 
   const totalAmount = cart.reduce(
-    (total, item) => total + Math.round(item.price * 83) * item.quantity,
+    (total, item) => total + item.price * item.quantity,
     0
   );
 
@@ -72,9 +72,9 @@ const Checkout = () => {
       items: cart.map((item) => ({
         id: item.id,
         title: item.title,
-        price: Math.round(item.price * 83),
+        price: item.price,
         quantity: item.quantity,
-        imgName: item.imgName,
+        imgName: item.thumbnail,
       })),
     };
 
@@ -232,7 +232,7 @@ const Checkout = () => {
               >
                 <div className="flex ">
                   <img
-                    src={`/products/${item.imgName}-1-cart.webp`}
+                    src={item.thumbnail}
                     alt={item.title}
                     className=" h-16 rounded-md  "
                   />
@@ -242,13 +242,13 @@ const Checkout = () => {
                   </div>
                 </div>
                 <p className="text-lg font-bold">
-                  ₹ {Math.round(item.price * 83) * item.quantity}
+                  ${item.price * item.quantity}
                 </p>
               </div>
             ))}
             <div className="flex justify-between items-center border-t pt-4 mt-4">
               <h3 className="text-xl font-bold">Total Amount:</h3>
-              <p className="text-2xl font-extrabold">₹ {totalAmount}</p>
+              <p className="text-2xl font-extrabold">${totalAmount}</p>
             </div>
           </div>
 

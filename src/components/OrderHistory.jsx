@@ -50,18 +50,18 @@ const OrderHistory = () => {
                 className="flex justify-between items-center mb-4"
               >
                 <div className="flex">
-                  {/* <img
-                    src={`/products/${item.imgName}-1-cart.webp`}
+                  <img
+                    src={item.imgName}
                     alt={item.title}
                     className="h-16 rounded-md"
-                  /> */}
+                  />
                   <div className="pl-4">
                     <h4 className="text-md font-semibold">{item.title}</h4>
                     <p className="text-gray-600">Quantity: {item.quantity}</p>
                   </div>
                 </div>
                 <p className="text-lg font-bold">
-                  ₹ {Math.round(item.price) * item.quantity}
+                  ${item.price * item.quantity}
                 </p>
               </div>
             ))}

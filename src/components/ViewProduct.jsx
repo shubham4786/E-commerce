@@ -1,77 +1,80 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Rating from "@mui/material/Rating";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  addToCart,
+  productData,
+  removeFromCart,
+} from "../redux/products/productsActions";
+import { toast, ToastContainer } from "react-toastify";
+import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
+import { LinearProgress } from "@mui/material";
 
 const ViewProduct = () => {
-  const product = {
-    id: 129,
-    title: "Realme X",
-    description:
-      "The Realme X is a mid-range smartphone known for its sleek design and impressive display. It offers a good balance of performance and camera capabilities for users seeking a quality device.",
-    category: "smartphones",
-    price: 299.99,
-    discountPercentage: 2.39,
-    rating: 4.42, // Average rating
-    stock: 87,
-    tags: ["smartphones", "realme"],
-    brand: "Realme",
-    sku: "5E11C5C4",
-    weight: 1,
-    dimensions: {
-      width: 29.32,
-      height: 16.3,
-      depth: 24.12,
-    },
-    warrantyInformation: "1 month warranty",
-    shippingInformation: "Ships in 3-5 business days",
-    availabilityStatus: "In Stock",
-    reviews: [
-      {
-        rating: 4,
-        comment: "Highly recommended!",
-        date: "2024-05-23T08:56:21.625Z",
-        reviewerName: "Benjamin Foster",
-      },
-      {
-        rating: 4,
-        comment: "Very satisfied!",
-        date: "2024-05-23T08:56:21.625Z",
-        reviewerName: "Madison Collins",
-      },
-      {
-        rating: 5,
-        comment: "Fast shipping!",
-        date: "2024-05-23T08:56:21.625Z",
-        reviewerName: "Emily Johnson",
-      },
-    ],
-    returnPolicy: "7 days return policy",
-    meta: {
-      createdAt: "2024-05-23T08:56:21.625Z",
-      updatedAt: "2024-05-23T08:56:21.625Z",
-      barcode: "0139612574728",
-      qrCode: "https://assets.dummyjson.com/public/qr-code.png",
-    },
-    images: [
-      "https://cdn.dummyjson.com/products/images/smartphones/Realme%20X/1.png",
-      "https://cdn.dummyjson.com/products/images/smartphones/Realme%20X/2.png",
-      "https://cdn.dummyjson.com/products/images/smartphones/Realme%20X/3.png",
-    ],
-    thumbnail:
-      "https://cdn.dummyjson.com/products/images/smartphones/Realme%20X/thumbnail.png",
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { cart, product } = useSelector((state) => state.products);
+  const { id } = useParams();
+
+  const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await dispatch(productData(id));
+      setLoading(false);
+    };
+    fetchData();
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (product) {
+      setSelectedImage(product.images[0]);
+    }
+  }, [product]);
+
+  if (loading) {
+    return (
+      <div className="h-[80vh] pt-40 px-10 sm:px-20 md:px-36 lg:px-56  ">
+        <LinearProgress />
+      </div>
+    );
+  }
+
+  const handleAddToCart = () => {
+    dispatch(addToCart(product));
+    toast.success(`product added to the cart!`, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
   };
 
-  const [selectedImage, setSelectedImage] = useState(product.images[0]);
+  const handleRemoveFromCart = (id) => {
+    dispatch(removeFromCart(id));
+  };
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
   };
 
   return (
-    <div className="container mx-auto p-6 bg-white">
+    <div className="container mx-auto p-6 bg-white pt-16">
+      <ToastContainer />
       <div className="flex flex-col lg:flex-row lg:space-x-8">
-        {/* Product Images */}
         <div className="flex-1 mb-6 lg:mb-0">
           <div className="flex space-x-4 mb-4">
+            <ArrowCircleLeftOutlinedIcon
+              sx={{ fontSize: 50 }}
+              className=" text-cyan-700 hover:text-cyan-900 cursor-pointer"
+              onClick={() => navigate(-1)}
+            />
             {product.images.map((image, index) => (
               <img
                 key={index}
@@ -93,13 +96,11 @@ const ViewProduct = () => {
           </div>
         </div>
 
-        {/* Product Information */}
         <div className="flex-1">
           <h1 className="text-4xl font-bold mb-2 text-gray-900">
             {product.title}
           </h1>
 
-          {/* Display Overall Rating */}
           <div className="flex items-center mb-4">
             <div className="text-yellow-500 text-lg mr-2">
               <Rating
@@ -108,7 +109,6 @@ const ViewProduct = () => {
                 precision={0.5}
                 readOnly
               />
-              {/* Display stars based on average rating */}
             </div>
             <p className="text-gray-700 text-lg font-semibold">
               {product.rating.toFixed(1)} / 5
@@ -120,7 +120,6 @@ const ViewProduct = () => {
 
           <p className="text-gray-600 mb-4">{product.description}</p>
 
-          {/* Price and Discount */}
           <div className="text-2xl font-semibold text-blue-600 mb-2">
             ${product.price.toFixed(2)}
             <span className="text-sm text-gray-500 line-through ml-2">
@@ -132,7 +131,6 @@ const ViewProduct = () => {
             </span>
           </div>
 
-          {/* Category, Brand, Availability */}
           <div className="text-sm text-gray-500 mb-4">
             Category: <span className="text-gray-700">{product.category}</span>
           </div>
@@ -150,7 +148,6 @@ const ViewProduct = () => {
             </span>
           </div>
 
-          {/* Product Info Section */}
           <div className="text-sm text-gray-500 mb-4">
             <h3 className="font-bold text-lg text-gray-800 mb-2">
               Product Info:
@@ -169,14 +166,32 @@ const ViewProduct = () => {
             </p>
           </div>
 
-          {/* Add to Cart / Buy Now Button */}
-          <button className="bg-blue-500 text-white px-6 py-2 rounded-full mt-4 hover:bg-blue-600 transition-colors">
-            Add to Cart
-          </button>
+          {cart.some((item) => item.id === product.id) ? (
+            <>
+              <button
+                onClick={() => handleRemoveFromCart(product.id)}
+                className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded ml-4"
+              >
+                Remove
+              </button>
+              <button
+                onClick={() => navigate("/cart")}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded ml-4"
+              >
+                Go to Cart
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={handleAddToCart}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded ml-4"
+            >
+              Add to Cart
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Customer Reviews */}
       <div className="mt-12">
         <h2 className="text-2xl font-semibold mb-6">Customer Reviews</h2>
         {product.reviews.length > 0 ? (
@@ -209,7 +224,6 @@ const ViewProduct = () => {
         )}
       </div>
 
-      {/* Return Policy */}
       <div className="mt-12">
         <h2 className="text-2xl font-semibold mb-6">Return Policy</h2>
         <p className="text-gray-600">{product.returnPolicy}</p>

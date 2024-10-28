@@ -4,6 +4,17 @@ export const FETCH_PRODUCTS_REQUEST = "FETCH_PRODUCTS_REQUEST";
 export const FETCH_PRODUCTS_SUCCESS = "FETCH_PRODUCTS_SUCCESS";
 export const FETCH_PRODUCTS_FAILURE = "FETCH_PRODUCTS_FAILURE";
 
+export const FETCH_CATEGORY_PRODUCTS_REQUEST =
+  "FETCH_CATEGORY_PRODUCTS_REQUEST";
+export const FETCH_CATEGORY_PRODUCTS_SUCCESS =
+  "FETCH_CATEGORY_PRODUCTS_SUCCESS";
+export const FETCH_CATEGORY_PRODUCTS_FAILURE =
+  "FETCH_CATEGORY_PRODUCTS_FAILURE";
+
+export const PRODUCT_DATA_REQUEST = "PRODUCT_DATA_REQUEST";
+export const PRODUCT_DATA_SUCCESS = "PRODUCT_DATA_SUCCESS";
+export const PRODUCT_DATA_FAILURE = "PRODUCT_DATA_FAILURE";
+
 export const FETCH_ORDER_HISTORY_REQUEST = "FETCH_ORDER_HISTORY_REQUEST";
 export const FETCH_ORDER_HISTORY_SUCCESS = "FETCH_ORDER_HISTORY_SUCCESS";
 export const FETCH_ORDER_HISTORY_FAILURE = "FETCH_ORDER_HISTORY_FAILURE";
@@ -15,6 +26,7 @@ export const PLACE_ORDER_FAILURE = "PLACE_ORDER_FAILURE";
 export const TOGGLE_SIZE_FILTER = "TOGGLE_SIZE_FILTER";
 export const UPDATE_PRICE_FILTER = "UPDATE_PRICE_FILTER";
 export const TOGGLE_FREE_SHIPPING_FILTER = "TOGGLE_FREE_SHIPPING_FILTER";
+export const TOGGLE_BRAND_FILTER = "TOGGLE_BRAND_FILTER";
 
 export const ADD_TO_CART = "ADD_TO_CART";
 export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
@@ -31,6 +43,32 @@ export const fetchProductsSuccess = (products) => ({
 
 export const fetchProductsFailure = (error) => ({
   type: FETCH_PRODUCTS_FAILURE,
+  payload: error,
+});
+
+export const fetchCategoryProductsRequest = () => ({
+  type: FETCH_CATEGORY_PRODUCTS_REQUEST,
+});
+
+export const fetchCategoryProductsSuccess = (products) => ({
+  type: FETCH_CATEGORY_PRODUCTS_SUCCESS,
+  payload: products,
+});
+
+export const fetchCategoryProductsFailure = (error) => ({
+  type: FETCH_CATEGORY_PRODUCTS_FAILURE,
+  payload: error,
+});
+
+export const productDataRequest = () => ({ type: PRODUCT_DATA_REQUEST });
+
+export const productDataSuccess = (products) => ({
+  type: PRODUCT_DATA_SUCCESS,
+  payload: products,
+});
+
+export const productDataFailure = (error) => ({
+  type: PRODUCT_DATA_FAILURE,
   payload: error,
 });
 
@@ -58,6 +96,11 @@ export const updatePriceFilter = (priceRange) => ({
 
 export const toggleFreeShippingFilter = () => ({
   type: TOGGLE_FREE_SHIPPING_FILTER,
+});
+
+export const toggleBrandFilter = (brand) => ({
+  type: TOGGLE_BRAND_FILTER,
+  payload: brand,
 });
 
 export const addToCart = (item) => ({
@@ -105,6 +148,30 @@ export const fetchData = () => async (dispatch) => {
     dispatch(fetchProductsSuccess(response.data));
   } catch (error) {
     dispatch(fetchProductsFailure(error.message));
+  }
+};
+
+export const fetchCategoryProducts = (category) => async (dispatch) => {
+  dispatch(fetchCategoryProductsRequest());
+  try {
+    const response = await axios.get(
+      `https://e-commerce-data-8zft.onrender.com/products?category=${category}`
+    );
+    dispatch(fetchCategoryProductsSuccess(response.data));
+  } catch (error) {
+    dispatch(fetchCategoryProductsFailure(error.message));
+  }
+};
+
+export const productData = (id) => async (dispatch) => {
+  dispatch(productDataRequest());
+  try {
+    const response = await axios.get(
+      `https://e-commerce-data-8zft.onrender.com/products/${id}`
+    );
+    dispatch(productDataSuccess(response.data));
+  } catch (error) {
+    dispatch(productDataFailure(error.message));
   }
 };
 

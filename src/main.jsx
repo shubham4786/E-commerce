@@ -21,19 +21,21 @@ import OrderConfirmation from "./components/OrderConfirmation.jsx";
 import OrderHistory from "./components/OrderHistory.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import ViewProduct from "./components/ViewProduct.jsx";
+import Home from "./components/Home.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route path="" element={<Products />} />
+      <Route path="" element={<Home />} />
+      <Route path="products/:category" element={<Products />} />
       <Route path="cart" element={<Cart />} />
-      <Route path="product/:id" element={<ProductView />} />
+      <Route path="product/:id" element={<ViewProduct />} />
       <Route path="checkout" element={<Checkout />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/order-confirmation" element={<OrderConfirmation />} />
-      <Route path="/orders" element={<OrderHistory />} />
+      <Route path="signup" element={<Signup />} />
+      <Route path="login" element={<Login />} />
+      <Route path="profile" element={<Profile />} />
+      <Route path="order-confirmation" element={<OrderConfirmation />} />
+      <Route path="orders" element={<OrderHistory />} />
     </Route>
   )
 );
@@ -41,7 +43,6 @@ const router = createBrowserRouter(
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
-      {/* <ViewProduct /> */}
       <RouterProvider router={router} />
     </Provider>
   </StrictMode>

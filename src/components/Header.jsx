@@ -6,6 +6,7 @@ import { styled } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/auth/authActions";
 import Avatar from "@mui/material/Avatar";
+import SearchBar from "./SearchBar";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -69,6 +70,7 @@ function Header() {
         <Link className="text-white text-2xl font-bold p-2" to={"/"}>
           ShopFlex
         </Link>
+        <SearchBar />
         <div className="hidden md:flex space-x-6">
           {constantRoute.map((item) => (
             <Link

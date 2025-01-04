@@ -21,7 +21,7 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-100 ">
       {status === "loading" && (
         <div className="h-[80vh] pt-40 px-10 sm:px-20 md:px-36 lg:px-56 ">
           <LinearProgress />

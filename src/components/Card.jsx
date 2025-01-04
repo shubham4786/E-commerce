@@ -1,13 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addToCart,
-  decrementQuantity,
-  incrementQuantity,
-} from "../redux/products/productsActions";
+import { addToCart, removeFromCart } from "../redux/products/productsActions";
 import { Link, useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
-function Card({ product }) {
+const Card = ({ product }) => {
   const cart = useSelector((state) => state.products.cart);
 
   const navigate = useNavigate();
@@ -29,78 +25,77 @@ function Card({ product }) {
     });
   };
 
-  const handleIncrementQuantity = (id) => {
-    dispatch(incrementQuantity(id));
+  const handleRemoveFromCart = (id) => {
+    dispatch(removeFromCart(id));
   };
-
-  const handleDecrementQuantity = (id) => {
-    dispatch(decrementQuantity(id));
-  };
-
-  const getQuantity = (productId) => {
-    const item = cart.find((item) => item.id === productId);
-    return item ? item.quantity : 0;
-  };
-
-  const quantity = getQuantity(product.id);
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 hover:p-4">
+    <div className="flex flex-col bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
       <Link to={`/product/${product.id}`}>
         <img
-          src={`/products/${product.imgName}-1-product.webp`}
+          src={product.thumbnail}
           alt={product.title}
-          className="h-56 w-full rounded-md  "
+          className="w-full h-40 object-cover"
         />
-        <h3 className=" font-semibold text-center text-gray-800 mb-1">
-          {product.title}
-        </h3>
       </Link>
+      <div className="p-4 flex flex-col justify-between h-full">
+        <Link to={`/product/${product.id}`}>
+          <h3 className="text-lg font-semibold text-gray-800">
+            {product.title}
+          </h3>
+          <p className="text-sm text-gray-600 mt-2 line-clamp-2">
+            {product.description}
+          </p>
+        </Link>
+        <div className="mt-4 flex justify-between items-center">
+          <div>
+            <span className="text-lg font-bold text-blue-900">
+              ${product.price}
+            </span>
+            <span
+              className={`ml-3 px-2 py-1 rounded text-xs font-semibold ${
+                product.availabilityStatus === "Low Stock"
+                  ? "bg-red-100 text-red-600"
+                  : "bg-green-100 text-green-600"
+              }`}
+            >
+              {product.availabilityStatus}
+            </span>
+          </div>
+          <div className="flex items-center text-sm text-gray-500">
+            <span className="text-yellow-500">⭐ {product.rating}</span>
+            <span className="ml-2">({product.reviews.length} reviews)</span>
+          </div>
+        </div>
 
-      <div className="text-gray-700 font-semibold pl-2 text-sm">
-        MRP: ₹ {Math.round(product.price * 83)}
+        <div className="mt-4">
+          {cart.some((item) => item.id === product.id) ? (
+            <div className="flex">
+              <button
+                onClick={() => handleRemoveFromCart(product.id)}
+                className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-3 rounded w-1/2"
+              >
+                Remove
+              </button>
+              <button
+                onClick={() => navigate("/cart")}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded ml-4 w-1/2"
+              >
+                Go to Cart
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => handleAddToCart(product)}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded w-full"
+            >
+              Add to Cart
+            </button>
+          )}
+        </div>
       </div>
-      {cart.some((item) => item.id === product.id) ? (
-        <>
-          <div className=" flex justify-around ">
-            <button
-              className="mt-2 font-bold text-2xl bg-blue-600 text-white pb-1 px-8 rounded-lg hover:bg-blue-700"
-              onClick={() => handleDecrementQuantity(product.id)}
-            >
-              -
-            </button>
-            <input
-              type="text"
-              className=" w-8 font-semibold text-center text-lg "
-              value={quantity}
-              readOnly
-            />
-            <button
-              className="mt-2 font-bold text-2xl bg-blue-600 text-white pb-1 px-8 rounded-lg hover:bg-blue-700"
-              onClick={() => handleIncrementQuantity(product.id)}
-            >
-              +
-            </button>
-          </div>
-          <div className=" flex justify-around ">
-            <button
-              className="mt-2 mx-3 w-full bg-blue-600 text-white  py-1 rounded-lg hover:bg-blue-700"
-              onClick={() => navigate("/cart")}
-            >
-              Go to Cart
-            </button>
-          </div>
-        </>
-      ) : (
-        <button
-          className="mt-2 w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
-          onClick={handleAddToCart}
-        >
-          Add to Cart
-        </button>
-      )}
     </div>
   );
-}
+};
 
 export default Card;

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchCategoryProducts,
   fetchData,
+  setRatingFilter,
 } from "../redux/products/productsActions";
 import { toast, ToastContainer } from "react-toastify";
 import Sizes from "./Sizes";
@@ -12,6 +13,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { useNavigate, useParams } from "react-router-dom";
 import Carousel from "./Carousel";
 import BrandFilter from "./BrandFilter";
+import RatingFilter from "./RatingFilter";
 
 function Products() {
   const dispatch = useDispatch();
@@ -27,6 +29,7 @@ function Products() {
 
   useEffect(() => {
     dispatch(fetchCategoryProducts(category));
+    dispatch(setRatingFilter(0));
   }, [category]);
 
   useEffect(() => {
@@ -54,6 +57,8 @@ function Products() {
                 <PriceRange />
 
                 {uniqueBrands[0] && <BrandFilter uniqueBrands={uniqueBrands} />}
+
+                <RatingFilter />
               </div>
               <div className="w-4/5 pl-3 overflow-y-auto h-screen no-scrollbar">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">

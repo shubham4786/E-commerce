@@ -27,6 +27,7 @@ export const TOGGLE_SIZE_FILTER = "TOGGLE_SIZE_FILTER";
 export const UPDATE_PRICE_FILTER = "UPDATE_PRICE_FILTER";
 export const TOGGLE_FREE_SHIPPING_FILTER = "TOGGLE_FREE_SHIPPING_FILTER";
 export const TOGGLE_BRAND_FILTER = "TOGGLE_BRAND_FILTER";
+export const SET_RATING_FILTER = "SET_RATING_FILTER";
 
 export const ADD_TO_CART = "ADD_TO_CART";
 export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
@@ -101,6 +102,11 @@ export const toggleFreeShippingFilter = () => ({
 export const toggleBrandFilter = (brand) => ({
   type: TOGGLE_BRAND_FILTER,
   payload: brand,
+});
+
+export const setRatingFilter = (rating) => ({
+  type: SET_RATING_FILTER,
+  payload: rating,
 });
 
 export const addToCart = (item) => ({

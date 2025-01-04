@@ -9,12 +9,15 @@ function App() {
   const isHomePage = location.pathname === "/";
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen bg-gray-100">
       {!isHomePage && <Header />}
 
-      <Outlet />
-      {/* <Footer /> */}
-    </>
+      <main className="flex-grow">
+        <Outlet />
+      </main>
+
+      <Footer />
+    </div>
   );
 }
 

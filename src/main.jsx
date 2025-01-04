@@ -22,6 +22,7 @@ import OrderHistory from "./components/OrderHistory.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import ViewProduct from "./components/ViewProduct.jsx";
 import Home from "./components/Home.jsx";
+import SearchResults from "./components/SearchResults.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -36,6 +37,7 @@ const router = createBrowserRouter(
       <Route path="profile" element={<Profile />} />
       <Route path="order-confirmation" element={<OrderConfirmation />} />
       <Route path="orders" element={<OrderHistory />} />
+      <Route path="/search" element={<SearchResults />} />
     </Route>
   )
 );

@@ -12,7 +12,7 @@ function BrandFilter({ uniqueBrands }) {
   };
 
   return (
-    <div className="mb-6">
+    <div className="mb-4">
       <label className="block mb-2 font-semibold">Filter by Brand:</label>
 
       {uniqueBrands.map((brand, index) => (

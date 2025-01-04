@@ -19,6 +19,7 @@ import {
   PRODUCT_DATA_REQUEST,
   PRODUCT_DATA_SUCCESS,
   REMOVE_FROM_CART,
+  SET_RATING_FILTER,
   TOGGLE_BRAND_FILTER,
   TOGGLE_FREE_SHIPPING_FILTER,
   TOGGLE_SIZE_FILTER,
@@ -41,60 +42,56 @@ const initialState = {
   orders: [],
   categories: [],
   categoryProducts: [],
+  ratingFilter: 0,
+};
+
+const applyFilters = (products, filters) => {
+  const {
+    selectedSizes,
+    priceFilter,
+    freeShippingFilter,
+    selectedBrands,
+    ratingFilter,
+  } = filters;
+
+  return products.filter((product) => {
+    const sizeMatch =
+      !selectedSizes.length ||
+      selectedSizes.some((size) => product.availableSizes.includes(size));
+
+    const priceMatch =
+      product.price >= priceFilter.min && product.price <= priceFilter.max;
+
+    const freeShippingMatch = !freeShippingFilter || product.isFreeShipping;
+
+    const brandMatch =
+      !selectedBrands.length || selectedBrands.includes(product.brand);
+
+    const ratingMatch = product.rating >= ratingFilter;
+
+    return (
+      sizeMatch && priceMatch && freeShippingMatch && brandMatch && ratingMatch
+    );
+  });
+};
+
+const getMinMaxPrice = (products) => {
+  const prices = products.map((product) => product.price);
+  return { min: Math.min(...prices), max: Math.max(...prices) };
 };
 
 const productsReducer = (state = initialState, action) => {
   const { type, payload } = action;
-
-  const applyFilters = (
-    products,
-    selectedSizes,
-    priceFilter,
-    freeShippingFilter,
-    selectedBrands
-  ) => {
-    return products.filter((product) => {
-      const sizeMatch = selectedSizes.length
-        ? product.availableSizes.some((size) => selectedSizes.includes(size))
-        : true;
-
-      const priceMatch =
-        product.price >= priceFilter.min && product.price <= priceFilter.max;
-
-      const freeShippingMatch = freeShippingFilter
-        ? product.isFreeShipping === true
-        : true;
-
-      const brandMatch = selectedBrands.length
-        ? selectedBrands.includes(product.brand)
-        : true;
-
-      return sizeMatch && priceMatch && freeShippingMatch && brandMatch;
-    });
-  };
-
-  const getMinMaxPrice = (products) => {
-    const prices = products.map((product) => product.price);
-    return {
-      min: Math.min(...prices),
-      max: Math.max(...prices),
-    };
-  };
 
   switch (type) {
     case FETCH_PRODUCTS_REQUEST:
       return { ...state, status: "loading", error: null };
 
     case FETCH_PRODUCTS_SUCCESS:
-      const uniqueCategories = [
+      const categories = [
         ...new Set(payload.map((product) => product.category)),
       ];
-      return {
-        ...state,
-        status: "succeeded",
-        products: payload,
-        categories: uniqueCategories,
-      };
+      return { ...state, status: "succeeded", products: payload, categories };
 
     case FETCH_PRODUCTS_FAILURE:
       return { ...state, status: "failed", error: payload };
@@ -103,20 +100,17 @@ const productsReducer = (state = initialState, action) => {
       return { ...state, status: "loading", error: null };
 
     case FETCH_CATEGORY_PRODUCTS_SUCCESS:
-      const { min, max } = getMinMaxPrice(payload);
+      const priceRange = getMinMaxPrice(payload);
       return {
         ...state,
         status: "succeeded",
         categoryProducts: payload,
-        filteredItems: applyFilters(
-          payload,
-          state.selectedSizes,
-          { min, max },
-          state.freeShippingFilter,
-          state.selectedBrands
-        ),
-        priceFilter: { min, max },
-        maximumPrice: max,
+        filteredItems: applyFilters(payload, {
+          ...state,
+          priceFilter: priceRange,
+        }),
+        priceFilter: priceRange,
+        maximumPrice: priceRange.max,
       };
 
     case FETCH_CATEGORY_PRODUCTS_FAILURE:
@@ -141,35 +135,27 @@ const productsReducer = (state = initialState, action) => {
       return { ...state, status: "failed", error: payload };
 
     case TOGGLE_SIZE_FILTER:
-      const size = payload;
-      const selectedSizes = state.selectedSizes.includes(size)
-        ? state.selectedSizes.filter((s) => s !== size)
-        : [...state.selectedSizes, size];
+      const selectedSizes = state.selectedSizes.includes(payload)
+        ? state.selectedSizes.filter((size) => size !== payload)
+        : [...state.selectedSizes, payload];
       return {
         ...state,
         selectedSizes,
-        filteredItems: applyFilters(
-          state.categoryProducts,
+        filteredItems: applyFilters(state.categoryProducts, {
+          ...state,
           selectedSizes,
-          state.priceFilter,
-          state.freeShippingFilter,
-          state.selectedBrands
-        ),
+        }),
       };
 
     case UPDATE_PRICE_FILTER:
-      const [minPrice, maxPrice] = payload;
-      const priceFilter = { min: minPrice, max: maxPrice };
+      const priceFilter = { min: payload[0], max: payload[1] };
       return {
         ...state,
         priceFilter,
-        filteredItems: applyFilters(
-          state.categoryProducts,
-          state.selectedSizes,
+        filteredItems: applyFilters(state.categoryProducts, {
+          ...state,
           priceFilter,
-          state.freeShippingFilter,
-          state.selectedBrands
-        ),
+        }),
       };
 
     case TOGGLE_FREE_SHIPPING_FILTER:
@@ -177,60 +163,53 @@ const productsReducer = (state = initialState, action) => {
       return {
         ...state,
         freeShippingFilter,
-        filteredItems: applyFilters(
-          state.categoryProducts,
-          state.selectedSizes,
-          state.priceFilter,
+        filteredItems: applyFilters(state.categoryProducts, {
+          ...state,
           freeShippingFilter,
-          state.selectedBrands
-        ),
+        }),
       };
 
     case TOGGLE_BRAND_FILTER:
-      const brand = payload;
-      const selectedBrands = state.selectedBrands.includes(brand)
-        ? state.selectedBrands.filter((b) => b !== brand)
-        : [...state.selectedBrands, brand];
+      const selectedBrands = state.selectedBrands.includes(payload)
+        ? state.selectedBrands.filter((brand) => brand !== payload)
+        : [...state.selectedBrands, payload];
       return {
         ...state,
         selectedBrands,
-        filteredItems: applyFilters(
-          state.categoryProducts,
-          state.selectedSizes,
-          state.priceFilter,
-          state.freeShippingFilter,
-          selectedBrands
-        ),
+        filteredItems: applyFilters(state.categoryProducts, {
+          ...state,
+          selectedBrands,
+        }),
+      };
+
+    case SET_RATING_FILTER:
+      return {
+        ...state,
+        ratingFilter: payload,
+        filteredItems: applyFilters(state.categoryProducts, {
+          ...state,
+          ratingFilter: payload,
+        }),
       };
 
     case ADD_TO_CART:
-      const item = payload;
-      const existingItem = state.cart.find(
-        (cartItem) => cartItem.id === item.id
-      );
-      if (existingItem) {
-        return {
-          ...state,
-          cart: state.cart.map((cartItem) =>
-            cartItem.id === item.id
-              ? { ...cartItem, quantity: cartItem.quantity + 1 }
-              : cartItem
-          ),
-        };
-      } else {
-        return {
-          ...state,
-          cart: [...state.cart, { ...item, quantity: 1 }],
-        };
-      }
+      const cartItem = state.cart.find((item) => item.id === payload.id);
+      return {
+        ...state,
+        cart: cartItem
+          ? state.cart.map((item) =>
+              item.id === payload.id
+                ? { ...item, quantity: item.quantity + 1 }
+                : item
+            )
+          : [...state.cart, { ...payload, quantity: 1 }],
+      };
 
     case INCREMENT_QUANTITY:
       return {
         ...state,
-        cart: state.cart.map((cartItem) =>
-          cartItem.id === payload
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
-            : cartItem
+        cart: state.cart.map((item) =>
+          item.id === payload ? { ...item, quantity: item.quantity + 1 } : item
         ),
       };
 
@@ -238,18 +217,18 @@ const productsReducer = (state = initialState, action) => {
       return {
         ...state,
         cart: state.cart
-          .map((cartItem) =>
-            cartItem.id === payload && cartItem.quantity >= 1
-              ? { ...cartItem, quantity: cartItem.quantity - 1 }
-              : cartItem
+          .map((item) =>
+            item.id === payload && item.quantity > 1
+              ? { ...item, quantity: item.quantity - 1 }
+              : item
           )
-          .filter((cartItem) => cartItem.quantity > 0),
+          .filter((item) => item.quantity > 0),
       };
 
     case REMOVE_FROM_CART:
       return {
         ...state,
-        cart: state.cart.filter((cartItem) => cartItem.id !== payload),
+        cart: state.cart.filter((item) => item.id !== payload),
       };
 
     case CLEAR_CART:
@@ -259,11 +238,7 @@ const productsReducer = (state = initialState, action) => {
       return { ...state, status: "loading", error: null };
 
     case FETCH_ORDER_HISTORY_SUCCESS:
-      return {
-        ...state,
-        status: "succeeded",
-        orders: payload,
-      };
+      return { ...state, status: "succeeded", orders: payload };
 
     case FETCH_ORDER_HISTORY_FAILURE:
       return { ...state, status: "failed", error: payload };

@@ -2,10 +2,10 @@ import React from "react";
 
 function Footer() {
   return (
-    <footer className="bg-gray-800 text-white py-6 w-full ">
-      <div className="container mx-auto text-center">
-        <p>&copy; 2024 Your Shop Name. All rights reserved.</p>
-      </div>
+    <footer className="bg-gray-400 text-center py-4">
+      <p className="text-gray-900">
+        &copy; 2024 ShopFlex. All rights reserved.
+      </p>
     </footer>
   );
 }

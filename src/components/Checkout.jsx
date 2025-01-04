@@ -105,28 +105,29 @@ const Checkout = () => {
   };
 
   return (
-    <div className="container mx-auto p-8 pt-20">
+    <div className="container mx-auto p-8 pt-20 bg-gray-100 rounded-lg shadow-lg">
       <ToastContainer />
-      <div className="flex">
+      <div className="flex items-center mb-6">
         <ArrowCircleLeftOutlinedIcon
-          sx={{ fontSize: 50 }}
-          className=" text-cyan-700 hover:text-cyan-900 cursor-pointer"
+          sx={{ fontSize: 40 }}
+          className="text-cyan-700 hover:text-cyan-900 cursor-pointer mr-2"
           onClick={() => navigate(-1)}
         />
-
-        <h1 className="text-4xl font-extrabold mb-8 ml-3">Checkout</h1>
+        <h1 className="text-4xl font-extrabold text-gray-800">Checkout</h1>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">Shipping Information</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+            Shipping Information
+          </h2>
 
           {editMode ? (
             <form>
               {error && <p className="text-red-500 font-bold mb-4">{error}</p>}
               <div className="mb-4">
                 <label
-                  className="block text-gray-700 font-bold mb-2"
+                  className="block text-gray-700 font-semibold mb-1"
                   htmlFor="name"
                 >
                   Full Name
@@ -134,7 +135,7 @@ const Checkout = () => {
                 <input
                   id="name"
                   type="text"
-                  className="w-full p-3 border rounded"
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -142,7 +143,7 @@ const Checkout = () => {
               </div>
               <div className="mb-4">
                 <label
-                  className="block text-gray-700 font-bold mb-2"
+                  className="block text-gray-700 font-semibold mb-1"
                   htmlFor="street"
                 >
                   Street
@@ -150,7 +151,7 @@ const Checkout = () => {
                 <input
                   id="street"
                   type="text"
-                  className="w-full p-3 border rounded"
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                   value={street}
                   onChange={(e) => setStreet(e.target.value)}
                   required
@@ -158,7 +159,7 @@ const Checkout = () => {
               </div>
               <div className="mb-4">
                 <label
-                  className="block text-gray-700 font-bold mb-2"
+                  className="block text-gray-700 font-semibold mb-1"
                   htmlFor="city"
                 >
                   City
@@ -166,7 +167,7 @@ const Checkout = () => {
                 <input
                   id="city"
                   type="text"
-                  className="w-full p-3 border rounded"
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   required
@@ -174,7 +175,7 @@ const Checkout = () => {
               </div>
               <div className="mb-4">
                 <label
-                  className="block text-gray-700 font-bold mb-2"
+                  className="block text-gray-700 font-semibold mb-1"
                   htmlFor="postalCode"
                 >
                   Postal Code
@@ -182,39 +183,37 @@ const Checkout = () => {
                 <input
                   id="postalCode"
                   type="text"
-                  className="w-full p-3 border rounded"
+                  className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                   value={postalCode}
                   onChange={(e) => setPostalCode(e.target.value)}
                   required
                 />
               </div>
-
               <button
                 type="button"
                 onClick={handleSaveAddress}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md mt-4"
               >
                 Save Address
               </button>
             </form>
           ) : (
             <div>
-              <p className="text-lg mb-4">
+              <p className="text-lg mb-2">
                 <strong>Full Name:</strong> {name}
               </p>
-              <p className="text-lg mb-4">
+              <p className="text-lg mb-2">
                 <strong>Street:</strong> {user?.address?.street}
               </p>
-              <p className="text-lg mb-4">
+              <p className="text-lg mb-2">
                 <strong>City:</strong> {user?.address?.city}
               </p>
-              <p className="text-lg mb-4">
+              <p className="text-lg mb-2">
                 <strong>Postal Code:</strong> {user?.address?.postalCode}
               </p>
-
               <button
                 onClick={() => setEditMode(true)}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md mt-4"
               >
                 Update Address
               </button>
@@ -222,39 +221,45 @@ const Checkout = () => {
           )}
         </div>
 
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">Order Summary</h2>
-          <div className="bg-white shadow-lg rounded-lg p-6">
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+            Order Summary
+          </h2>
+          <div className="bg-gray-50 rounded-lg p-4">
             {cart.map((item) => (
               <div
                 key={item.id}
                 className="flex justify-between items-center mb-4"
               >
-                <div className="flex ">
+                <div className="flex items-center">
                   <img
                     src={item.thumbnail}
                     alt={item.title}
-                    className=" h-16 rounded-md  "
+                    className="w-16 h-16 rounded-md shadow-md mr-4"
                   />
-                  <div className="pl-4">
-                    <h3 className="text-lg font-semibold">{item.title}</h3>
-                    <p className="text-gray-600">Quantity: {item.quantity}</p>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      {item.title}
+                    </h3>
+                    <p className="text-gray-500">Quantity: {item.quantity}</p>
                   </div>
                 </div>
-                <p className="text-lg font-bold">
+                <p className="text-lg font-bold text-gray-800">
                   ${item.price * item.quantity}
                 </p>
               </div>
             ))}
             <div className="flex justify-between items-center border-t pt-4 mt-4">
-              <h3 className="text-xl font-bold">Total Amount:</h3>
-              <p className="text-2xl font-extrabold">${totalAmount}</p>
+              <h3 className="text-xl font-semibold text-gray-800">
+                Total Amount:
+              </h3>
+              <p className="text-2xl font-bold text-blue-600">${totalAmount}</p>
             </div>
           </div>
 
           <button
             onClick={handlePlaceOrder}
-            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded mt-6"
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-md mt-6"
           >
             Place Order
           </button>

@@ -53,11 +53,11 @@ const Carousel = ({ categories, category }) => {
           <div
             key={index}
             onClick={() => handleCategorySelect(category)}
-            className={`min-w-max bg-white rounded-lg shadow-md cursor-pointer transition-colors 
+            className={`min-w-max rounded-lg shadow-md cursor-pointer transition-colors 
                 ${
                   selectedCategory == category
-                    ? "bg-slate-500 text-white"
-                    : "hover:bg-blue-200"
+                    ? "bg-slate-600 text-white"
+                    : "hover:bg-blue-200 bg-white"
                 }`}
           >
             <p className="text-center font-semibold py-2 px-3 hover:scale-105">

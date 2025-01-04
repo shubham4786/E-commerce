@@ -24,7 +24,7 @@ const PriceRange = () => {
 
   return (
     <>
-      <div className="mb-6">
+      <div className="mb-4">
         <label className="block mb-2 font-semibold">Price Range:</label>
         <Slider
           min={min}

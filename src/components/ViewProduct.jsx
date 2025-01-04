@@ -134,9 +134,12 @@ const ViewProduct = () => {
           <div className="text-sm text-gray-500 mb-4">
             Category: <span className="text-gray-700">{product.category}</span>
           </div>
-          <div className="text-sm text-gray-500 mb-4">
-            Brand: <span className="text-gray-700">{product.brand}</span>
-          </div>
+          {product.brand && (
+            <div className="text-sm text-gray-500 mb-4">
+              Brand: <span className="text-gray-700">{product.brand}</span>
+            </div>
+          )}
+
           <div className="text-sm text-gray-500 mb-4">
             Availability:
             <span
